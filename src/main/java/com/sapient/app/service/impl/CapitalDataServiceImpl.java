@@ -46,9 +46,11 @@ public class CapitalDataServiceImpl implements CapitalDataService {
 				ele.setIncome(convertToUsd(ele.getIncome(), ele.getCurrency()));
 			});
 			return this.getAveragedSortedData(capitalDataModels);
-		} catch (DataLoaderException | InvalidCurrencyException e) {
+		} catch (InvalidCurrencyException e) {
+			throw new CapitalDataServiceException(String.format("Data Grouping Failed. Cause :: %s", e.getMessage()), e);
+		} catch (DataLoaderException e) {
 			throw new CapitalDataServiceException(String.format("Data Loading Failed. Cause :: %s", e.getMessage()), e);
-		}
+		}	
 	}
 
 	private List<CapitalDataGroupByModel> getAveragedSortedData(List<CapitalDataModel> capitalDataModels) {
